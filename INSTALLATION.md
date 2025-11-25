@@ -1,85 +1,99 @@
-# Study Buddy - Installation Guide
+# Installation Guide
 
-Guida completa all'installazione di Study Buddy con supporto GPU.
+Complete installation guide for Study Buddy with GPU support.
 
-## Prerequisiti
+## Prerequisites
 
-### Software Richiesto
+### Required Software
 
-1. **Python 3.10+**
-   - Scarica da: https://www.python.org/downloads/
-   - Durante l'installazione, seleziona "Add Python to PATH"
+1.  **Python 3.10+**
 
-2. **NVIDIA GPU Drivers** (opzionale, per supporto GPU)
-   - Scarica da: https://www.nvidia.com/Download/index.aspx
-   - Verifica l'installazione con: `nvidia-smi`
+      * Download from: [https://www.python.org/downloads/](https://www.python.org/downloads/)
+      * During installation, select **"Add Python to PATH"**
 
-3. **FFmpeg** (per elaborazione audio/video)
-   - Scarica da: https://www.gyan.dev/ffmpeg/builds/
-   - Estrai e aggiungi la cartella `bin` al PATH di sistema
+2.  **NVIDIA GPU Drivers** (optional, for GPU support)
 
-4. **Tesseract OCR** (per OCR di immagini)
-   - Scarica da: https://github.com/UB-Mannheim/tesseract/wiki
-   - Aggiungi al PATH di sistema
+      * Download from: [https://www.nvidia.com/Download/index.aspx](https://www.nvidia.com/Download/index.aspx)
+      * Verify installation with: `nvidia-smi`
 
-5. **Poppler** (opzionale, per OCR di PDF scansionati)
-   - Scarica da: https://github.com/oschwartz10612/poppler-windows/releases/
-   - Estrai e aggiungi la cartella `bin` al PATH
+3.  **FFmpeg** (for audio/video processing)
 
-## Installazione Automatica (Consigliata)
+      * Download from: [https://www.gyan.dev/ffmpeg/builds/](https://www.gyan.dev/ffmpeg/builds/)
+      * Extract and add the `bin` folder to the system PATH
+
+4.  **Tesseract OCR** (for image OCR)
+
+      * Download from: [https://github.com/UB-Mannheim/tesseract/wiki](https://github.com/UB-Mannheim/tesseract/wiki)
+      * Add to the system PATH
+
+5.  **Poppler** (optional, for OCR of scanned PDFs)
+
+      * Download from: [https://github.com/oschwartz10612/poppler-windows/releases/](https://github.com/oschwartz10612/poppler-windows/releases/)
+      * Extract and add the `bin` folder to the PATH
+
+-----
+
+## Automatic Installation (Recommended)
 
 ### Windows
 
-1. Apri PowerShell nella cartella del progetto
-2. Esegui lo script di setup:
-   ```powershell
-   .\setup.ps1
-   ```
+1.  Open PowerShell in the project folder.
+2.  Run the setup script:
+    ```powershell
+    .\setup.ps1
+    ```
 
-Lo script:
-- Crea automaticamente l'ambiente virtuale
-- Rileva la presenza di GPU NVIDIA
-- Installa la versione corretta di PyTorch (CPU o CUDA)
-- Installa tutte le dipendenze necessarie
+The script:
 
-## Installazione Manuale
+  * Automatically creates the virtual environment.
+  * Detects the presence of an NVIDIA GPU.
+  * Installs the correct version of PyTorch (CPU or CUDA).
+  * Installs all necessary dependencies.
 
-### 1. Crea l'ambiente virtuale
+-----
+
+## Manual Installation
+
+### 1\. Create the virtual environment
 
 ```powershell
 python -m venv venv
 .\venv\Scripts\Activate.ps1
 ```
 
-### 2. Installa PyTorch
+### 2\. Install PyTorch
 
-**Con GPU (CUDA 12.8):**
+**With GPU (CUDA 12.8):**
+
 ```powershell
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128
 ```
 
-**Solo CPU:**
+**CPU Only:**
+
 ```powershell
 pip install torch torchvision torchaudio
 ```
 
-### 3. Installa le dipendenze
+### 3\. Install dependencies
 
 ```powershell
 pip install -r requirements.txt
 ```
 
-### 4. Installa pacchetti aggiuntivi
+### 4\. Install additional packages
 
 ```powershell
 pip install ffmpeg-python youtube-transcript-api wikipedia google-search-results
 ```
 
-## Configurazione
+-----
 
-### 1. Crea il file `.env`
+## Configuration
 
-Copia `.env.example` in `.env` e configura le tue API keys:
+### 1\. Create the `.env` file
+
+Copy `.env.example` to `.env` and configure your API keys:
 
 ```bash
 # LLM Providers
@@ -100,74 +114,82 @@ IMGBB_API_KEY=your_imgbb_key
 E2B_API_KEY=your_e2b_api_key
 ```
 
-### 2. Verifica l'installazione
+### 2\. Verify installation
 
 ```powershell
 python -c "import torch; print(f'PyTorch: {torch.__version__}'); print(f'CUDA: {torch.cuda.is_available()}')"
 ```
 
-## Avvio dell'Applicazione
+-----
+
+## Running the Application
 
 ```powershell
 streamlit run streamlit_frontend.py
 ```
 
-L'applicazione sarà disponibile su: http://localhost:8502
+The application will be available at: http://localhost:8502
 
-## Risoluzione Problemi
+-----
 
-### GPU non rilevata
+## Troubleshooting
 
-Se hai una GPU NVIDIA ma PyTorch usa la CPU:
+### GPU not detected
 
-1. Verifica i driver NVIDIA: `nvidia-smi`
-2. Reinstalla PyTorch con CUDA:
-   ```powershell
-   pip uninstall torch torchvision torchaudio
-   pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128
-   ```
+If you have an NVIDIA GPU but PyTorch is using the CPU:
 
-### Errori di importazione
+1.  Check NVIDIA drivers: `nvidia-smi`
+2.  Reinstall PyTorch with CUDA:
+    ```powershell
+    pip uninstall torch torchvision torchaudio
+    pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128
+    ```
 
-Se ricevi errori `ModuleNotFoundError`:
+### Import Errors
+
+If you receive `ModuleNotFoundError` errors:
 
 ```powershell
-pip install <nome_pacchetto_mancante>
+pip install <missing_package_name>
 ```
 
-Pacchetti comuni che potrebbero mancare:
-- `ffmpeg-python`
-- `youtube-transcript-api`
-- `wikipedia`
-- `google-search-results`
+Common packages that might be missing:
 
-### Errori OCR
+  * `ffmpeg-python`
+  * `youtube-transcript-api`
+  * `wikipedia`
+  * `google-search-results`
 
-Se l'OCR non funziona:
+### OCR Errors
 
-1. Verifica che Tesseract sia installato: `tesseract --version`
-2. Verifica che sia nel PATH di sistema
-3. Per PDF scansionati, installa Poppler
+If OCR is not working:
 
-### Ctrl+C non funziona
+1.  Verify that Tesseract is installed: `tesseract --version`
+2.  Verify that it is in the system PATH.
+3.  For scanned PDFs, ensure Poppler is installed.
 
-Streamlit a volte non risponde immediatamente a Ctrl+C su Windows. Soluzioni:
+### Ctrl+C not working
 
-1. Premi Ctrl+C più volte
-2. Chiudi il terminale
-3. Usa Task Manager per terminare il processo Python
+Streamlit sometimes doesn't respond immediately to Ctrl+C on Windows. Solutions:
 
-## Aggiornamento
+1.  Press Ctrl+C multiple times.
+2.  Close the terminal window.
+3.  Use Task Manager to terminate the Python process.
 
-Per aggiornare le dipendenze:
+-----
+
+## Updating
+
+To update dependencies:
 
 ```powershell
 pip install --upgrade -r requirements.txt
 ```
 
-## Supporto
+## Support
 
-Per problemi o domande, consulta:
-- README.md del progetto
-- Documentazione di Streamlit: https://docs.streamlit.io/
-- Documentazione PyTorch: https://pytorch.org/docs/
+For issues or questions, consult:
+
+  * The project README.md
+  * Streamlit Documentation: [https://docs.streamlit.io/](https://docs.streamlit.io/)
+  * PyTorch Documentation: [https://pytorch.org/docs/](https://pytorch.org/docs/)
